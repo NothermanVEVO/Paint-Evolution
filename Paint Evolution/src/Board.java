@@ -48,12 +48,13 @@ public class Board extends JPanel {
         g2.dispose();
     }
 
-    public synchronized static void addItem(GraphicItem item){
+    public static void addItem(GraphicItem item){
         items.add(item);
         Window.board.repaint();
     }
 
-    public synchronized static void removeItemAt(int index){
+    public static void removeItemAt(int index){
+        System.out.println(items.get(index));
         items.remove(index);
         Window.board.repaint();
     }
@@ -63,7 +64,7 @@ public class Board extends JPanel {
     }
 
     public void createTools(){
-        pencil = new Pencil();
+        pencil = new Pencil(true);
     }
 
 }

@@ -3,7 +3,8 @@ package src.events;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import src.Board;
+import src.ToolBar;
+import src.Items.Pencil;
 
 public class Key implements KeyListener{
 
@@ -24,8 +25,16 @@ public class Key implements KeyListener{
                 zPressed = true;
                 break;
         }
-        if((ctrlPressed && zPressed) && Board.itemsSize() > 0){
-            Board.removeItemAt(Board.itemsSize() - 1);
+        switch (ToolBar.getTool()) {
+            case PENCIL:
+                if((ctrlPressed && zPressed) && Pencil.linesSize() > 0){
+                    Pencil.removeLineAt(Pencil.linesSize() - 1);
+                }
+                break;
+            default:
+                System.err.println("UNKNOWN TOOL KEY PRESSED");
+                System.exit(-1);
+                break;
         }
     }
 

@@ -9,7 +9,8 @@ public class Line extends GraphicItem{
     private Vector2 initialPosition;
     private Vector2 finalPosition;
 
-    public Line(Vector2 initialPosition, Vector2 finalPosition){
+    public Line(boolean auto_draw, Vector2 initialPosition, Vector2 finalPosition){
+        super(auto_draw);
         this.initialPosition = initialPosition;
         this.finalPosition = finalPosition;
     }

@@ -19,7 +19,7 @@ public class Window extends JFrame {
         setFocusable(true);
         addKeyListener(key);
 
-        board = new Board(0, 50, width, height, Color.WHITE);
+        board = new Board(0, 0, width, height, Color.WHITE);
         add(board);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

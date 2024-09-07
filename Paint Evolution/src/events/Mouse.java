@@ -3,9 +3,9 @@ package src.events;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Line2D;
 
 import src.ToolBar;
-import src.Items.Line;
 import src.Items.Pencil;
 import src.sth.Vector2;
 
@@ -34,7 +34,6 @@ public class Mouse implements MouseListener, MouseMotionListener{
                 case PENCIL:
                     Pencil.setInitialVector(null);
                     break;
-                
                 default:
                     System.err.println("UNKNOWN TOOL RELEASE");
                     System.exit(-1);
@@ -66,7 +65,7 @@ public class Mouse implements MouseListener, MouseMotionListener{
                         Pencil.setInitialVector(new Vector2(mouseX, mouseY));
                         return;
                     }
-                    Pencil.addLine(new Line(Pencil.getInitialVector(), new Vector2(mouseX, mouseY)));
+                    Pencil.addLine(new Line2D.Double(Pencil.getInitialVector().x, Pencil.getInitialVector().y, mouseX, mouseY));
                     Pencil.setInitialVector(null);
                     break;
                 

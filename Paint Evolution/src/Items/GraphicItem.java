@@ -10,8 +10,8 @@ public abstract class GraphicItem {
     protected Color color;
     protected Vector2 size;
 
-    GraphicItem(){
-        Board.addItem(this);
+    GraphicItem(boolean auto_draw){
+        if(auto_draw) Board.addItem(this);
     }
 
     public abstract void draw(Graphics2D g2);

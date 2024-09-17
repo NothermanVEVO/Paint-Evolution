@@ -35,6 +35,7 @@ public class Pencil extends Tool{
         lines2D.add(line);
         pseudoLine.setLines2DArray(lines2D);
         if (Board.itemsContains(pseudoLine)) {
+            Window.board.grabFocus();
             Window.board.repaint();
         } else{
             Board.addItem(pseudoLine);
@@ -74,6 +75,7 @@ public class Pencil extends Tool{
         lines2D.clear();
         Board.removeItem(pseudoLine);
         pseudoLine.setAngle(0);
+        Window.board.grabFocus();
         Window.board.repaint();
     }
 
@@ -81,6 +83,7 @@ public class Pencil extends Tool{
     public void mouseDragged(MouseEvent e) {
         if (Key.is_alt_pressed()) {
             altWasJustReleased = true;
+            Window.board.grabFocus();
             Window.board.repaint();
             return;
         }

@@ -6,13 +6,11 @@ import javax.swing.JFrame;
 
 import src.GUI.Board;
 import src.GUI.ToolBar;
-import src.events.Key;
 
 public class Window extends JFrame {
 
     public static Board board = new Board();
     public static ToolBar toolBar = new ToolBar();
-    private static Key key = new Key();
 
     public Window(String name, int width, int height){
         super(name);
@@ -20,7 +18,6 @@ public class Window extends JFrame {
         setLocationRelativeTo(null);
         setEnabled(true);
         setFocusable(true);
-        addKeyListener(key);
 
         setResizable(false); //TODO: IMPLEMENT RESIZABLE
 

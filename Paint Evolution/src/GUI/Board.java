@@ -15,6 +15,7 @@ import src.Items.Tools.Pencil;
 import src.Items.Tools.PencilShape;
 import src.Items.Tools.Tool;
 import src.Items.Tools.PencilShape.Shapes;
+import src.events.Key;
 import src.events.Mouse;
 
 public class Board extends JPanel {
@@ -36,6 +37,8 @@ public class Board extends JPanel {
 
     private static int strokeSize = 1;
 
+    Key key = new Key();
+
     public Board(){}
 
     public Board(int x, int y, int width, int height, Color background_color){
@@ -47,6 +50,7 @@ public class Board extends JPanel {
         setEnabled(true);
         setFocusable(true);
         setDoubleBuffered(true);
+        addKeyListener(key);
 
         addMouseListener(mouse);
         addMouseMotionListener(mouse);
@@ -54,6 +58,7 @@ public class Board extends JPanel {
         createTools();
         current_tool = pencil;
 
+        grabFocus();
         repaint();
     }
 
@@ -117,6 +122,7 @@ public class Board extends JPanel {
             ToolBar.setUndoEnabled(true);
             ToolBar.setRedoEnabled(false);
         }
+        Window.board.grabFocus();
         Window.board.repaint();
     }
 
@@ -130,6 +136,7 @@ public class Board extends JPanel {
         if (Board.itemsSize() == 0) {
             ToolBar.setUndoEnabled(false);
         }
+        Window.board.grabFocus();
         Window.board.repaint();
     }
 
@@ -146,6 +153,7 @@ public class Board extends JPanel {
         if (Board.itemsSize() == 0) {
             ToolBar.setUndoEnabled(false);
         }
+        Window.board.grabFocus();
         Window.board.repaint();
     }
 
@@ -166,14 +174,6 @@ public class Board extends JPanel {
         return items.contains(object);
     }
 
-    public static void clearBoard(){
-        items.clear();
-        itemsCopy.clear();
-        ToolBar.setUndoEnabled(false);
-        ToolBar.setRedoEnabled(false);
-        Window.board.repaint();
-    }
-
     public static void dropItemsCopyAt(int index){
         items.add(itemsCopy.get(index));
         ToolBar.setUndoEnabled(true);
@@ -181,6 +181,18 @@ public class Board extends JPanel {
         if (itemsCopySize() == 0) {
             ToolBar.setRedoEnabled(false);
         }
+        Window.board.grabFocus();
+        Window.board.repaint();
+    }
+
+    public static void clearBoard(){
+        items.clear();
+        itemsCopy.clear();
+        color = Color.BLACK;
+        fill_color = new Color(0, 0, 0, 0);
+        strokeSize = 1;
+        ToolBar.reset();
+        Window.board.grabFocus();
         Window.board.repaint();
     }
 

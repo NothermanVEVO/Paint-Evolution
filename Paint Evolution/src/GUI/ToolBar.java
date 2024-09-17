@@ -60,7 +60,6 @@ public class ToolBar extends JPanel {
         undoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         undoButton.setEnabled(false);
         undoButton.addActionListener(l -> actionListener(l));
-        undoButton.setFocusable(false);
         add(undoButton);
 
         redoButton.setBounds(undoButton.getX() + undoButton.getWidth() + 15, 0, 75, height);
@@ -68,14 +67,13 @@ public class ToolBar extends JPanel {
         redoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         redoButton.setEnabled(false);
         redoButton.addActionListener(l -> actionListener(l));
-        redoButton.setFocusable(false);
         add(redoButton);
 
         createToolsComboBox();
-        tools_combo.setToolTipText("Escolha suas ferramenta de desenho.");
+        tools_combo.setToolTipText("Choose a tool to draw in the Board.");
         tools_combo.setBounds(redoButton.getX() + redoButton.getWidth() + 25, 0, 100, height);
         tools_combo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        tools_combo.setFocusable(false);
+        tools_combo.setFocusable(true);
         add(tools_combo);
 
         colorButton.setBackground(Board.getColor());
@@ -83,7 +81,6 @@ public class ToolBar extends JPanel {
         colorButton.addActionListener(l -> actionListener(l));
         colorButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         colorButton.setFocusPainted(false);
-        colorButton.setFocusable(false);
         add(colorButton);
 
         fillColorButton.setBackground(Color.BLACK);
@@ -91,18 +88,15 @@ public class ToolBar extends JPanel {
         fillColorButton.addActionListener(l -> actionListener(l));
         fillColorButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fillColorButton.setFocusPainted(false);
-        fillColorButton.setFocusable(false);
         add(fillColorButton);
 
         strokeSize.setBounds(fillColorButton.getX() + fillColorButton.getWidth() + 25, 0, 100, height);
         strokeSize.setValue(1);
-        strokeSize.setFocusable(false);
         strokeSize.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 strokeSize.setValue(Mat.clamp((int) strokeSize.getValue(), 1, 100));
                 Board.setStrokeSize((int) strokeSize.getValue());
-                strokeSize.transferFocusBackward();
             }
         }
         );
@@ -110,13 +104,11 @@ public class ToolBar extends JPanel {
 
         jPolygonSides.setBounds(strokeSize.getX() + strokeSize.getWidth() + 25, 0, 100, height);
         jPolygonSides.setValue(3);
-        jPolygonSides.setFocusable(false);
         jPolygonSides.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 jPolygonSides.setValue(Mat.clamp((int) jPolygonSides.getValue(), 3, 90));
                 polygonSides = (int) jPolygonSides.getValue();
-                jPolygonSides.transferFocusBackward();
             }
         }
         );
@@ -127,9 +119,7 @@ public class ToolBar extends JPanel {
         newCanvas.setFont(new Font("", Font.PLAIN, 7));
         newCanvas.setText("New Canvas");
         newCanvas.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // newCanvas.setEnabled(false);
         newCanvas.addActionListener(l -> actionListener(l));
-        newCanvas.setFocusable(false);
         add(newCanvas);
 
     }
@@ -145,7 +135,6 @@ public class ToolBar extends JPanel {
     private void actionListener(ActionEvent l){
         if(l.getSource() == tools_combo){
             jPolygonSides.setVisible(false);
-            Window.board.repaint();
             switch ((String) tools_combo.getSelectedItem()) {
                 case "Pencil":
                     Board.setTool(Tools.PENCIL);
@@ -159,7 +148,6 @@ public class ToolBar extends JPanel {
                 case "Polygon":
                     Board.setTool(Tools.POLYGON);
                     jPolygonSides.setVisible(true);
-                    Window.board.repaint();
                     break;
                 default:
                     break;
@@ -169,24 +157,31 @@ public class ToolBar extends JPanel {
             if (color != null) {
                 colorButton.setBackground(color);
                 Board.setColor(color);
+                Window.board.grabFocus();
+                Window.board.repaint();
             }
         } else if(l.getSource() == fillColorButton){
             Color color = JColorChooser.showDialog(this, "Fill color", colorButton.getBackground());
             if (color != null) {
                 fillColorButton.setBackground(color);
                 Board.set_fill_color(color);
+                Window.board.grabFocus();
+                Window.board.repaint();
             }
         } else if(l.getSource() == undoButton && Board.itemsSize() > 0){
             Board.removeItemAt(Board.itemsSize() - 1);
+            Window.board.grabFocus();
+            Window.board.repaint();
         } else if(l.getSource() == redoButton && Board.itemsCopySize() > 0){
             Board.dropItemsCopyAt(Board.itemsCopySize() - 1);
+            Window.board.grabFocus();
+            Window.board.repaint();
         } else if(l.getSource() == newCanvas){
             int choice = JOptionPane.showConfirmDialog(this, "You want to create a new Canvas?", "Create new Canvas", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 Board.clearBoard();
             }
         }
-        Window.board.repaint();
     }
 
     public static Tools getTool() {
@@ -199,6 +194,16 @@ public class ToolBar extends JPanel {
 
     public static int getPolygonSides() {
         return polygonSides;
+    }
+
+    public static void reset(){
+        polygonSides = 3;
+        strokeSize.setValue(1);
+        jPolygonSides.setValue(3);
+        colorButton.setBackground(Board.getColor());
+        fillColorButton.setBackground(Board.getColor());
+        setUndoEnabled(false);
+        setRedoEnabled(false);
     }
 
     public static void setUndoEnabled(boolean enabled){

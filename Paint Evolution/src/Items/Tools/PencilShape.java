@@ -119,6 +119,7 @@ public class PencilShape extends Tool{
             pseudoShape.getVector2()));
             pseudoShape.setSize(distance);
         }
+        Window.board.grabFocus();
         Window.board.repaint();
     }
 

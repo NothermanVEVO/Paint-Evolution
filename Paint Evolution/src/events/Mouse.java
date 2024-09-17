@@ -3,16 +3,19 @@ package src.events;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Line2D;
 
-import src.ToolBar;
-import src.Items.Pencil;
-import src.sth.Vector2;
+import src.GUI.Board;
 
 public class Mouse implements MouseListener, MouseMotionListener{
 
     private static boolean mousePressed;
     private static int mouseButton;
+
+    private static int x;
+    private static int y;
+
+    private static int x_when_pressed;
+    private static int y_when_pressed;
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -20,25 +23,21 @@ public class Mouse implements MouseListener, MouseMotionListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
+        x_when_pressed = e.getX();
+        y_when_pressed = e.getY();
         mouseButton = e.getButton();
         mousePressed = true;
+        if (mouseButton == MouseEvent.BUTTON1) {
+            Board.getCurrentTool().mouseWasJustPressed(e);
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         mouseButton = e.getButton();
         mousePressed = false;
-        Pencil.setMouseWasJustReleased(true);
-        if(mouseButton == MouseEvent.BUTTON1){
-            switch (ToolBar.getTool()) {
-                case PENCIL:
-                    Pencil.setInitialVector(null);
-                    break;
-                default:
-                    System.err.println("UNKNOWN TOOL RELEASE");
-                    System.exit(-1);
-                    break;
-            }
+        if (mouseButton == MouseEvent.BUTTON1) {
+            Board.getCurrentTool().mouseWasJustReleased(e);
         }
     }
 
@@ -50,35 +49,37 @@ public class Mouse implements MouseListener, MouseMotionListener{
     public void mouseExited(MouseEvent e) {
     }
 
-    public static boolean isMousePressed() {
-        return mousePressed;
-    }
-
     @Override
     public void mouseDragged(MouseEvent e) {
+        x = e.getX();
+        y = e.getY();
         if(mouseButton == MouseEvent.BUTTON1){
-            switch (ToolBar.getTool()) {
-                case PENCIL:
-                    int mouseX = e.getX();
-                    int mouseY = e.getY();
-                    if(Pencil.getInitialVector() == null){
-                        Pencil.setInitialVector(new Vector2(mouseX, mouseY));
-                        return;
-                    }
-                    Pencil.addLine(new Line2D.Double(Pencil.getInitialVector().x, Pencil.getInitialVector().y, mouseX, mouseY));
-                    Pencil.setInitialVector(null);
-                    break;
-                
-                default:
-                    System.err.println("UNKNOWN TOOL DRAGGED");
-                    System.exit(-1);
-                    break;
-            }
+            Board.getCurrentTool().mouseDragged(e);
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+    }
+
+    public static boolean isMousePressed() {
+        return mousePressed;
+    }
+
+    public static int getX() {
+        return x;
+    }
+
+    public static int getY() {
+        return y;
+    }
+
+    public static int getX_when_pressed() {
+        return x_when_pressed;
+    }
+
+    public static int getY_when_pressed() {
+        return y_when_pressed;
     }
 
 }

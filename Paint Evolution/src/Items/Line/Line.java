@@ -1,7 +1,8 @@
-package src.Items;
+package src.Items.Line;
 
 import java.awt.Graphics2D;
 
+import src.Items.GraphicItem;
 import src.sth.Vector2;
 
 public class Line extends GraphicItem{

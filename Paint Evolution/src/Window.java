@@ -4,11 +4,14 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
+import src.GUI.Board;
+import src.GUI.ToolBar;
 import src.events.Key;
 
 public class Window extends JFrame {
 
     public static Board board = new Board();
+    public static ToolBar toolBar = new ToolBar();
     private static Key key = new Key();
 
     public Window(String name, int width, int height){
@@ -19,12 +22,24 @@ public class Window extends JFrame {
         setFocusable(true);
         addKeyListener(key);
 
-        board = new Board(0, 0, width, height, Color.WHITE);
+        setResizable(false); //TODO: IMPLEMENT RESIZABLE
+
+        toolBar = new ToolBar(0, 0, width, 50, Color.GRAY);
+        add(toolBar);
+        board = new Board(0, 50, width, height, Color.WHITE);
         add(board);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setVisible(true);
+
+        while (Board.itemsSize() > 0) {
+            Board.removeItemAt(0);
+        }
+
+        ToolBar.setUndoEnabled(false);
+        ToolBar.setRedoEnabled(false);
+
     }
 
 }

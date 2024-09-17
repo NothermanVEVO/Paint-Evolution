@@ -197,6 +197,8 @@ public class ToolBar extends JPanel {
     }
 
     public static void reset(){
+        Board.setTool(Tools.PENCIL);
+        tools_combo.setSelectedItem("Pencil");
         polygonSides = 3;
         strokeSize.setValue(1);
         jPolygonSides.setValue(3);

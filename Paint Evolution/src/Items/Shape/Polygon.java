@@ -27,8 +27,8 @@ public class Polygon extends Shape{
         final Vector2 startPos = Vector2D.UP.getVct();
         points = new Vector2[vertices];
         originalPoints = new Vector2[vertices];
-        int n = 360 / vertices;
-        int sum = 0;
+        double n = 360.0 / vertices;
+        double sum = 0.0;
         for (int i = 0; i < vertices; i++) {
             originalPoints[i] = Vector2.rotate(startPos, Math.toRadians(sum));
             points[i] = Vector2.sum(Vector2.mult(originalPoints[i], size), new Vector2(x, y));
